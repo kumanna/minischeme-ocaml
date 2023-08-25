@@ -16,14 +16,21 @@ let is_value = function
 let rec step = function
   | Int _ -> failwith "Can't step integers!"
   | Multiop (op, ilist) ->
+    step_multiop op ilist
+
+and step_multiop op ilist =
+  let binop a b =
     match op with
-    | Add -> match ilist with
-      | [] -> Int 0
-      | [Int a] -> Int a
-      | [Multiop (op1, ilist1)] -> step (Multiop (op1, ilist1))
-      | (Int a)::(Int b)::tail -> step (Multiop (Add, (Int (a + b)::tail)))
-      | (Int a)::(Multiop (op1, ilist1))::tail -> (Multiop (Add, (Int a)::(step (Multiop (op1, ilist1)))::tail))
-      | (Multiop (op1, ilist1))::tail -> (Multiop (Add, (step (Multiop (op1, ilist1)))::tail))
+    | Add -> a + b
+    | Multiply -> a * b
+  in
+  match ilist with
+  | [] -> Int 0
+  | [Int a] -> Int a
+  | [Multiop (op1, ilist1)] -> step (Multiop (op1, ilist1))
+  | (Int a)::(Int b)::tail -> step (Multiop (op, (Int (binop a b)::tail)))
+  | (Int a)::(Multiop (op1, ilist1))::tail -> (Multiop (op, (Int a)::(step (Multiop (op1, ilist1)))::tail))
+  | (Multiop (op1, ilist1))::tail -> (Multiop (op, (step (Multiop (op1, ilist1)))::tail))
 
 let rec eval e =
   if is_value e then e else (e |> step |> eval)

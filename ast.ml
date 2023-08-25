@@ -1,5 +1,6 @@
 type multiop =
   | Add
+  | Multiply
 
 type expr =
   | Int of int

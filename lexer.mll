@@ -11,6 +11,7 @@ rule read =
   parse
    white { read lexbuf }
   | "+" { PLUS }
+  | "*" { MULT }
   | "(" { LPAREN }
   | ")" { RPAREN }
   | int { INT (Lexing.lexeme lexbuf |> int_of_string) }

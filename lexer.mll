@@ -10,5 +10,8 @@ let int = '-'? digit+
 rule read =
   parse
    white { read lexbuf }
+  | "+" { PLUS }
+  | "(" { LPAREN }
+  | ")" { RPAREN }
   | int { INT (Lexing.lexeme lexbuf |> int_of_string) }
   | eof { EOF }

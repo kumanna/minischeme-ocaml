@@ -1,6 +1,5 @@
 open Ast
 
-
 let parse s =
   let lexbuf = Lexing.from_string s in
   let ast = Parser.prog Lexer.read lexbuf in
@@ -8,12 +7,23 @@ let parse s =
 
 let string_of_val = function
   | Int i -> string_of_int i
+  | Multiop _ -> failwith "Parsing error!"
 
 let is_value = function
   | Int _ -> true
+  | Multiop _ -> false
 
-let step = function
+let rec step = function
   | Int _ -> failwith "Can't step integers!"
+  | Multiop (op, ilist) ->
+    match op with
+    | Add -> match ilist with
+      | [] -> Int 0
+      | [Int a] -> Int a
+      | [Multiop (op1, ilist1)] -> step (Multiop (op1, ilist1))
+      | (Int a)::(Int b)::tail -> step (Multiop (Add, (Int (a + b)::tail)))
+      | (Int a)::(Multiop (op1, ilist1))::tail -> (Multiop (Add, (Int a)::(step (Multiop (op1, ilist1)))::tail))
+      | (Multiop (op1, ilist1))::tail -> (Multiop (Add, (step (Multiop (op1, ilist1)))::tail))
 
 let rec eval e =
   if is_value e then e else (e |> step |> eval)

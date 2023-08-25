@@ -1,6 +1,6 @@
 
 let test_add () =
-  Alcotest.(check int) "same int" 6 (Minischeme.interp "(+ 1 2 3)")
+  Alcotest.(check string) "same int" "6" (Minischeme.interp "(+ 1 2 3)")
 
 
 let () =

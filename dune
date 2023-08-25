@@ -1,0 +1,18 @@
+(env
+  (dev
+    (flags (:standard -warn-error -A))))
+
+(menhir
+ (modules parser))
+
+(ocamllex lexer)
+
+(library
+ (name minischeme)
+ (modules minischeme parser lexer ast))
+
+(executable
+ (name minischeme_test)
+ (public_name minischeme_test)
+ (libraries minischeme alcotest)
+ (modules minischeme_test))

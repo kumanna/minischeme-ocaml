@@ -27,7 +27,6 @@ and step_multiop op ilist =
   match ilist with
   | [] -> Int 0
   | [Int a] -> Int a
-  | [Multiop (op1, ilist1)] -> step (Multiop (op1, ilist1))
   | (Int a)::(Int b)::tail -> step (Multiop (op, (Int (binop a b)::tail)))
   | (Int a)::(Multiop (op1, ilist1))::tail -> (Multiop (op, (Int a)::(step (Multiop (op1, ilist1)))::tail))
   | (Multiop (op1, ilist1))::tail -> (Multiop (op, (step (Multiop (op1, ilist1)))::tail))

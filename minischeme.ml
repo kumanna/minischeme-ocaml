@@ -64,8 +64,10 @@ and step_binop op e1 e2 =
   match (e1, e2) with
   | (Int a, Int b) -> Int (binop a b)
   | (Float a, Float b) -> Float (binop_float a b)
-  | (Float a, Int b) | (Int b, Float a) -> Float (binop_float a (Float.of_int b))
-  | (Float a, e1) | (e1, Float a) -> step_binop op (Float a) (step e1)
+  | (Float a, Int b) -> Float (binop_float a (Float.of_int b))
+  | (Int a, Float b) -> Float (binop_float (Float.of_int a) b)
+  | (Float a, e1) -> step_binop op (Float a) (step e1)
+  | (e1, Float a) -> step_binop op (step e1) (Float a)
   | (Int a, e1) | (e1, Int a) -> step_binop op (Int a) (step e1)
   | (x, y) -> step_binop op (step x) (step y)
 

@@ -20,6 +20,12 @@ let test_combined1 () =
 let test_combined2 () =
   Alcotest.(check string) "same int" "36" (Minischeme.interp "(+ (* -2 -3) (* -5 -6))")
 
+let test_float_1 () =
+  Alcotest.(check string) "same float" "0.01" (Minischeme.interp "0.01")  
+
+let test_float_2 () =
+  Alcotest.(check string) "same float" "-3.14" (Minischeme.interp "-3.14")  
+
 
 let () =
   let open Alcotest in
@@ -31,4 +37,6 @@ let () =
       "multiplication2", [ test_case "Test integer multiplication" `Slow test_mult2 ];
       "combined1", [ test_case "Test integer combined" `Slow test_combined1 ];
       "combined2", [ test_case "Test integer combined" `Slow test_combined2 ];
+      "float1", [ test_case "Test float" `Slow test_float_1 ];
+      "float2", [ test_case "Test float" `Slow test_float_2 ];
     ]

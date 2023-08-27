@@ -7,14 +7,17 @@ let parse s =
 
 let string_of_val = function
   | Int i -> string_of_int i
+  | Float f -> Float.to_string f
   | Multiop _ -> failwith "Parsing error!"
 
 let is_value = function
   | Int _ -> true
+  | Float _ -> true
   | Multiop _ -> false
 
 let rec step = function
   | Int _ -> failwith "Can't step integers!"
+  | Float _ -> failwith "Can't step floats!"
   | Multiop (op, ilist) ->
     step_multiop op ilist
 
@@ -30,6 +33,7 @@ and step_multiop op ilist =
   | (Int a)::(Int b)::tail -> step (Multiop (op, (Int (binop a b)::tail)))
   | (Int a)::(Multiop (op1, ilist1))::tail -> (Multiop (op, (Int a)::(step (Multiop (op1, ilist1)))::tail))
   | (Multiop (op1, ilist1))::tail -> (Multiop (op, (step (Multiop (op1, ilist1)))::tail))
+  | _ -> failwith "Unimplemented"
 
 let rec eval e =
   if is_value e then e else (e |> step |> eval)

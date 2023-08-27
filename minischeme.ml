@@ -65,11 +65,11 @@ and step_binop op e1 e2 =
   | (Float a, Float b) -> Float (binop_float a b)
   | (Float a, Int b) -> Float (binop_float a (Float.of_int b))
   | (Int a, Float b) -> Float (binop_float (Float.of_int a) b)
-  | (Float a, e1) -> step_binop op (Float a) (step e1)
-  | (e1, Float a) -> step_binop op (step e1) (Float a)
-  | (Int a, e1) -> step_binop op (Int a) (step e1)
-  | (e1, Int a) -> step_binop op (step e1) (Int a)
-  | (x, y) -> step_binop op (step x) (step y)
+  | (Float a, expr1) -> step_binop op (Float a) (step expr1)
+  | (expr1, Float a) -> step_binop op (step expr1) (Float a)
+  | (Int a, expr1) -> step_binop op (Int a) (step expr1)
+  | (expr1, Int a) -> step_binop op (step expr1) (Int a)
+  | (expr1, expr2) -> step_binop op (step expr1) (step expr2)
 
 let rec eval e =
   if is_value e then e else (e |> step |> eval)

@@ -11,6 +11,7 @@ let float = '-'? int '.' int
 rule read =
   parse
    white { read lexbuf }
+  | "-" { MINUS }
   | "+" { PLUS }
   | "*" { MULT }
   | "(" { LPAREN }

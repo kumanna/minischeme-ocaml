@@ -39,10 +39,10 @@ let test_float_mult2 () =
   Alcotest.(check string) "same int" "36.0" (Minischeme.interp "(* 1 2 3 (* 1 2 3.0))")
 
 let test_float_combined1 () =
-  Alcotest.(check string) "same int" "36.0" (Minischeme.interp "(* 1 (* 2 1) (+ 1 2) (* 1.0 2 3))")
+  Alcotest.(check string) "same int" "36.0" (Minischeme.interp "(* 1 (* (- 3 1) 1) (+ 1 2) (* 1.0 2 3))")
 
 let test_float_combined2 () =
-  Alcotest.(check string) "same int" "36.0" (Minischeme.interp "(+ (* -2 -3.0) (* -5 -6.0))")
+  Alcotest.(check string) "same int" "36.0" (Minischeme.interp "(+ (* -2 -3.0) (* (- 5 10) -6.0))")
 
 let () =
   let open Alcotest in

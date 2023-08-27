@@ -45,8 +45,7 @@ and step_multiop op ilist =
   | (Int a)::(Int b)::tail -> step (Multiop (op, (Int (binop a b)::tail)))
   | (Float a)::(Float b)::tail -> step (Multiop (op, (Float (binop_float a b)::tail)))
   | (Float a)::(Int b)::tail | (Int b)::(Float a)::tail -> step (Multiop (op, (Float (binop_float a (Float.of_int b))::tail)))
-  | (Int a)::(Multiop (op1, ilist1))::tail -> (Multiop (op, (Int a)::(step (Multiop (op1, ilist1)))::tail))
-  | (Float a)::(Multiop (op1, ilist1))::tail -> (Multiop (op, (Float a)::(step (Multiop (op1, ilist1)))::tail))
+  | e1::(Multiop (op1, ilist1))::tail when is_value e1 -> (Multiop (op, e1::(step (Multiop (op1, ilist1)))::tail))
   | e1::tail -> Multiop (op, (step e1)::tail)
 
 and step_binop op e1 e2 =

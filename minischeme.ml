@@ -7,7 +7,8 @@ let parse s =
 
 let string_of_val = function
   | Int i -> string_of_int i
-  | Float f -> Float.to_string f
+  | Float f -> let s = Float.to_string f in
+    if String.ends_with ~suffix:"." s then s ^ "0" else s
   | Multiop _ -> failwith "Parsing error!"
 
 let is_value = function
@@ -27,13 +28,22 @@ and step_multiop op ilist =
     | Add -> a + b
     | Multiply -> a * b
   in
+  let binop_float a b =
+    match op with
+    | Add -> a +. b
+    | Multiply -> a *. b
+  in
   match ilist with
   | [] -> Int 0
   | [Int a] -> Int a
+  | [Float a] -> Float a
   | (Int a)::(Int b)::tail -> step (Multiop (op, (Int (binop a b)::tail)))
+  | (Float a)::(Float b)::tail -> step (Multiop (op, (Float (binop_float a b)::tail)))
+  | (Float a)::(Int b)::tail -> step (Multiop (op, (Float (binop_float a (Float.of_int b))::tail)))
+  | (Int b)::(Float a)::tail -> step (Multiop (op, (Float (binop_float a (Float.of_int b))::tail)))
   | (Int a)::(Multiop (op1, ilist1))::tail -> (Multiop (op, (Int a)::(step (Multiop (op1, ilist1)))::tail))
+  | (Float a)::(Multiop (op1, ilist1))::tail -> (Multiop (op, (Float a)::(step (Multiop (op1, ilist1)))::tail))
   | (Multiop (op1, ilist1))::tail -> (Multiop (op, (step (Multiop (op1, ilist1)))::tail))
-  | _ -> failwith "Unimplemented"
 
 let rec eval e =
   if is_value e then e else (e |> step |> eval)

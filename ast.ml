@@ -4,6 +4,7 @@ type multiop =
 
 type binop =
   | Subtract
+  | Divide
 
 type expr =
   | Int of int

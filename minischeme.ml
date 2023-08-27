@@ -54,10 +54,12 @@ and step_binop op e1 e2 =
   let binop a b =
     match op with
     | Subtract -> a - b
+    | Divide -> a / b
   in
   let binop_float a b =
     match op with
     | Subtract -> a -. b
+    | Divide -> a /. b
   in
   match (e1, e2) with
   | (Int a, Int b) -> Int (binop a b)

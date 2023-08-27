@@ -12,6 +12,7 @@ rule read =
   parse
    white { read lexbuf }
   | "-" { MINUS }
+  | "/" { DIVIDE }
   | "+" { PLUS }
   | "*" { MULT }
   | "(" { LPAREN }

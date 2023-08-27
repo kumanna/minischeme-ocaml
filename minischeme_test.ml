@@ -38,6 +38,12 @@ let test_float_mult1 () =
 let test_float_mult2 () =
   Alcotest.(check string) "same int" "36.0" (Minischeme.interp "(* 1 2 3 (* 1 2 3.0))")
 
+let test_float_divide1 () =
+  Alcotest.(check string) "same float" "6.0" (Minischeme.interp "(/ 12.0 2.0)")
+
+let test_float_divide2 () =
+  Alcotest.(check string) "same float" "36.0" (Minischeme.interp "(/ 216.0 6.0)")
+
 let test_float_combined1 () =
   Alcotest.(check string) "same int" "36.0" (Minischeme.interp "(* 1 (* (- 3 1) 1) (+ 1 2) (* 1.0 2 3))")
 
@@ -62,4 +68,6 @@ let () =
       "float6", [test_case "Test float arithmetic" `Slow test_float_mult2 ];
       "float7", [test_case "Test float arithmetic" `Slow test_float_combined1 ];
       "float8", [test_case "Test float arithmetic" `Slow test_float_combined2 ];
+      "float9", [test_case "Test float arithmetic" `Slow test_float_divide1 ];
+      "float10", [test_case "Test float arithmetic" `Slow test_float_divide2 ];
     ]
